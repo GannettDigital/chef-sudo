@@ -15,13 +15,27 @@ root          ALL=(ALL) ALL
 Cmnd_Alias <%= a[:name].upcase %> = <%= a[:command_list].join(', ') %>
 <% end -%>
 
-<% @sudoers_users.each do |user| -%>
+#User privilege specification
+<% if @sudoers_usersettings -%>
+    <% @sudoers_usersettings.each do |user| -%>
+<%= user[:name] %> <%= user[:hosts] %>=(<%= user[:runas] %>) <% if user[:passwordless] -%>NOPASSWD: <%= user[:commands] %> <% else -%><%=  user[:commands] %><% end -%>
+   <% end -%>
+<% else -%>
+    <% @sudoers_users.each do |user| -%>
 <%= user %> ALL=(ALL) <%= "NOPASSWD:" if @passwordless %>ALL
+    <% end -%>
 <% end -%>
 
-<% @sudoers_groups.each do |group| -%>
-# Members of the group '<%= group %>' may gain root privileges
-%<%= group %> ALL=(ALL) <%= "NOPASSWD:" if @passwordless %>ALL
+#Group privilege specification
+<% if @sudoers_groupsettings -%>
+    <% @sudoers_groupsettings.each do |group| -%>
+# Members of the '<%= group[:name] %>' may gain root privileges
+<%= group[:name] %> <%= group[:hosts] %>=(<%= group[:runas] %>) <% if group[:passwordless] -%>NOPASSWD: <%= group[:commands] %> <% else -%><%=  group[:commands] %><% end -%>
+    <% end -%>
+<% else -%>
+    <% @sudoers_groups.each do |group| -%>
+<%= group %> ALL=(ALL) <%= "NOPASSWD:" if @passwordless %>ALL
+    <% end -%>
 <% end -%>
 
 <%= "#includedir #{node['authorization']['sudo']['prefix']}/sudoers.d" if @include_sudoers_d  %>
