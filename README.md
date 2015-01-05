@@ -15,8 +15,10 @@ The platform has a package named `sudo` and the `sudoers` file is `/etc/sudoers`
 Attributes
 ----------
 - `node['authorization']['sudo']['groups']` - groups to enable sudo access (default: `[ "sysadmin" ]`)
+- `node['authorization']['sudo']['groupsettings']` - groups to enable sudo access along with host, user, nopasswd, and commands options - use overrides groups (default: `[]`)
 - `node['authorization']['sudo']['users']` - users to enable sudo access (default: `[]`)
-- `node['authorization']['sudo']['passwordless']` - use passwordless sudo (default: `false`)
+- `node['authorization']['sudo']['usersettings']` - users to enable sudo access along with host, user, nopasswd, and commands options - use overrides users (default: `[]`)
+- `node['authorization']['sudo']['passwordless']` - use passwordless sudo - not used for groupseetings and usersettings (default: `false`)
 - `node['authorization']['sudo']['include_sudoers_d']` - include and manager `/etc/sudoers.d` (default: `false`)
 - `node['authorization']['sudo']['agent_forwarding']` - preserve `SSH_AUTH_SOCK` when sudoing (default: `false`)
 - `node['authorization']['sudo']['sudoers_defaults']` - Array of `Defaults` entries to configure in `/etc/sudoers`
@@ -33,8 +35,9 @@ To use attributes for defining sudoers, set the attributes above on the node (or
     "authorization": {
       "sudo": {
         "groups": ["admin", "wheel", "sysadmin"],
+        "groupssettings": [{"name": "admin", "hosts": "ALL", "runas": "ALL", "passwordless": "true", "commands": "ALL"}, {"name": "wheel", "hosts": "ALL", "runas": "ALL", "passwordless": "true", "commands": "ALL"}, {"name": "sysadmin", "hosts": "ALL", "runas": "ALL", "commands": "REBOOT"}],
         "users": ["jerry", "greg"],
-        "passwordless": "true"
+        "usersettings": [{"name": "jerry", "hosts": "ALL", "runas": "ALL", "passwordless": "true", "commands": "ALL"}, {"name": "greg", "hosts": "ALL", "runas": "ALL", "commands": "EDIT"}]
       }
     }
   }
@@ -46,9 +49,10 @@ To use attributes for defining sudoers, set the attributes above on the node (or
 default_attributes(
   "authorization" => {
     "sudo" => {
-      "groups" => ["admin", "wheel", "sysadmin"],
+      "groups"=>["admin", "wheel", "sysadmin"],
+      "groupsettings" => [{ "name" => "admin", "hosts" => "ALL", "runas" => "ALL", "passwordless" => "true", "commands" => "ALL"}, {"name" =>  "wheel", "hosts" => "ALL", "runas" => "ALL", "passwordless" => "true", "commands" => "ALL"}, {"name" => "sysadmin", "hosts" => "ALL", "runas" => "ALL", "passwordless" => "false", "commands" => "REBOOT"}],
       "users" => ["jerry", "greg"],
-      "passwordless" => true
+      "usersettings" => [{"name" => "jerry", "hosts" => "ALL", "runas" => "ALL", "passwordless" => "true", "commands" => "ALL"}, {"name" => "greg", "hosts" => "ALL", "runas" => "ALL", "commands" => "EDIT"}]
     }
   }
 )
@@ -236,18 +240,6 @@ case it is not already</td>
       <td>defaults</td>
       <td>array of defaults this user has</td>
       <td><tt>['!requiretty','env_reset']</tt></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>env_keep_add</td>
-      <td>array of strings to add to env_keep</td>
-      <td><tt>['HOME', 'MY_ENV_VAR MY_OTHER_ENV_VAR']</tt></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>env_keep_subtract</td>
-      <td>array of strings to remove from env_keep</td>
-      <td><tt>['DISPLAY', 'MY_SECURE_ENV_VAR']</tt></td>
       <td></td>
     </tr>
     <tr>

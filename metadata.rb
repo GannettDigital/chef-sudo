@@ -27,9 +27,21 @@ attribute 'authorization/sudo/users',
   :type         => 'array',
   :default      => ''
 
+attribute 'authorization/sudo/usersettings',
+  :display_name => 'Sudo Users Settings',
+  :description  => 'Users who are allowed sudo along with host, user, nopasswd, and commands options',
+  :type         => 'array',
+  :default      => ''
+
 attribute 'authorization/sudo/groups',
   :display_name => 'Sudo Groups',
   :description  => 'Groups who are allowed sudo ALL',
+  :type         => 'array',
+  :default      => ''
+
+attribute 'authorization/sudo/groupsettings',
+  :display_name => 'Sudo Groups Settings',
+  :description  => 'Groups who are allowed sudo along with host, uer, nopasswd, and commands options.',
   :type         => 'array',
   :default      => ''
 

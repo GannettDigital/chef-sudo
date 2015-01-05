@@ -20,18 +20,18 @@
 actions :install, :remove
 default_action :install
 
-attribute :user,              :kind_of => String,           :default => nil
-attribute :group,             :kind_of => String,           :default => nil
-attribute :commands,          :kind_of => Array,            :default => ['ALL']
-attribute :host,              :kind_of => String,           :default => 'ALL'
-attribute :runas,             :kind_of => String,           :default => 'ALL'
-attribute :nopasswd,          :equal_to => [true, false],   :default => false
-attribute :template,          :kind_of => String,           :default => nil
-attribute :variables,         :kind_of => Hash,             :default => nil
-attribute :defaults,          :kind_of => Array,            :default => []
-attribute :command_aliases,   :kind_of => Array,            :default => []
-attribute :env_keep_add,      :kind_of => Array,            :default => []
-attribute :env_keep_subtract, :kind_of => Array,            :default => []
+attribute :user,            :kind_of => Array,            :default => [] 
+attribute :usersettings,    :kind_of => Array,            :default => []
+attribute :group,           :kind_of => Array,            :default => ['sysadmin']
+attribute :groupsettings,   :kind_of => Array,            :default => []
+attribute :commands,        :kind_of => Array,            :default => ['ALL']
+attribute :host,            :kind_of => String,           :default => 'ALL'
+attribute :runas,           :kind_of => String,           :default => 'ALL'
+attribute :nopasswd,        :equal_to => [true, false],   :default => false
+attribute :template,        :kind_of => String,           :default => nil
+attribute :variables,       :kind_of => Hash,             :default => nil
+attribute :defaults,        :kind_of => Array,            :default => []
+attribute :command_aliases, :kind_of => Array,            :default => []
 
 # Set default for the supports attribute in initializer since it is
 # a 'reserved' attribute name
@@ -43,12 +43,12 @@ end
 
 state_attrs :commands,
             :group,
+            :groupsettings,
             :host,
             :nopasswd,
             :runas,
             :template,
             :user,
+            :usersettings,
             :variables,
-            :command_aliases,
-            :env_keep_add,
-            :env_keep_subtract
+            :command_aliases
